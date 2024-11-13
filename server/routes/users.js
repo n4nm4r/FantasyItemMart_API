@@ -34,8 +34,30 @@ router.get('/', (req, res) => {
 
 
 //user sign up
-router.post('/signup',(req,res)=>{
+router.post('/signup', async(req,res)=>{
+  const{email,password, first_name, last_name} = req.body;
   res.send('User Signup');
+
+// Verify inputs not empty
+if(!email || !password || !first_name || !last_name) {
+  
+  res.status(400).send('Required fields must have a value.');
+  return;
+}
+
+const user = await prisma.customer.create(
+  {
+    data: {
+      email: email,
+      password: password,
+      first_name: first_name,
+      last_name: last_name,
+    }
+  }
+);
+
+res.json(user);
+
 });
 
 
