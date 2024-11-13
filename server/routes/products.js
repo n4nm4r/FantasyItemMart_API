@@ -29,14 +29,31 @@ router.get('/', (req, res) => {
     res.send('product route');
 });
 
-router.get('/all', (req, res)=>{
-res.send('all products');
+
+//get all prducts
+router.get('/all', async (req, res)=>{
+  const products = await prisma.product.findMany();
+
+  res.json(products);
 });
 
-router.get('/:id', (req, res)=>{
-res.send('Product by Id');
+
+
+//get products by ID
+router.get('/:id', async (req, res)=>{
+const product = await prisma.product.findUnique({
+  Where:{
+    product_id: parseInt(product_id),
+  },
 });
 
+
+});
+
+
+
+
+///get purchase
 router.get('/purchase',(req,res)=>{
 res.send('Purchase');
 });

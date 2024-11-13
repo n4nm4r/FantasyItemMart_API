@@ -27,20 +27,31 @@ const prisma = new PrismaClient({
 
 router.get('/', (req, res) => {
     res.send('user route');
-  });
-  
+});
+
+
+
+
+
+//user sign up
 router.post('/signup',(req,res)=>{
   res.send('User Signup');
 });
 
+
+//user login
 router.post('/login',(req,res)=>{
   res.send('User Login');
 });
 
+
+//user logout
 router.post('/logout',(req,res)=>{
   res.send('User Logout');
 });
 
+
+//get session
 router.post('/getSession',(req,res)=>{
   res.send('User Session');
 });
