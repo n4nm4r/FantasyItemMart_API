@@ -1,4 +1,5 @@
 import express from 'express';
+import { PrismaClient } from '@prisma/client';
 
 const router =express.Router();
 
@@ -16,6 +17,11 @@ const storage = multer.diskStorage({
     }
   });
   const upload = multer({ storage: storage });
+
+  //prisma setup
+  const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+  });
     
 
 
