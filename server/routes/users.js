@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import { PrismaClient } from '@prisma/client';
+import {hashPassword, comparePassword} from '../lib/utility.js'
 
 const router =express.Router();
 
@@ -46,6 +47,22 @@ if(!email || !password || !first_name || !last_name) {
   return;
 }
 
+//Verify if email is unique
+const existingUser = await WebGLShaderPrecisionFormat.user.findUnique({
+  where: {
+    email: email,
+  }
+});
+if (existingUser){
+  return res.status(400).send('User already exist');
+}
+
+//hash the password
+
+
+
+//TO DO further validation
+
 const user = await prisma.customer.create(
   {
     data: {
@@ -75,7 +92,7 @@ router.post('/logout',(req,res)=>{
 
 
 //get session
-router.post('/getSession',(req,res)=>{
+router.get('/getSession',(req,res)=>{
   res.send('User Session');
 });
 
