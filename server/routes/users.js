@@ -1,31 +1,17 @@
 import express from 'express';
-import multer from 'multer';
 import { PrismaClient } from '@prisma/client';
 import { hashPassword, comparePassword } from '../lib/utility.js';
 
 const router = express.Router();
 
-// Multer setup
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '/server/public/images/'); // save uploaded files in `public/images` folder
-  },
-  filename: function (req, file, cb) {
-    const ext = file.originalname.split('.').pop(); // get file extension
-    const uniqueFilename = Date.now() + '-' + Math.round(Math.random() * 1000) + '.' + ext; // generate unique filename - current timestamp + random number between 0 and 1000.
-    cb(null, uniqueFilename);
-  }
-});
-const upload = multer({ storage: storage });
+
 
 // Prisma setup
 const prisma = new PrismaClient();
 
 // Routes
 
-router.get('/', (req, res) => {
-  res.send('user route');
-});
+
 
 // User sign up
 router.post('/signup', async (req, res) => {
@@ -59,7 +45,7 @@ router.post('/signup', async (req, res) => {
     },
   });
 
-  res.json({'user' : email});
+  res.json({'user' : user.email});
 });
 
 // User login
@@ -89,9 +75,10 @@ router.post('/login', async (req, res) => {
   }
 
   // Setup user session data
-  req.session.email = existingUser.email;
   req.session.customer_id = existingUser.customer_id;
-  req.session.name = existingUser.first_name + ' ' + existingUser.last_name;
+  req.session.email = existingUser.email;
+  req.session.first_name = existingUser.first_name;
+  req.session.last_name = existingUser.last_name;
   console.log('logged in user: ' + req.session.email);
 
   // Send response
@@ -105,7 +92,23 @@ router.post('/logout', (req, res) => {
 });
 
 // Get session
-router.get('/getSession', (req, res) => {
+router.get('/getSession', async(req, res) => {
+  //verify user is logged in. so verify user is not null
+  
+  if(req.session.customer_id){
+    const user={
+      customer_Id: req.session.customer_id,
+      email: req.session.email.PrismaClient,
+      first_name: req.session.first_name,
+      last_name: req.session.last_name
+    }
+    res.json({user});
+
+  }
+  else{
+    return res.status(401).send('Not logged in');
+  }
+
   // Return values in session for users
   res.json({ 'user': req.session.email });
 });

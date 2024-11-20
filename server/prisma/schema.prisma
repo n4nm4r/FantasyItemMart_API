@@ -15,7 +15,7 @@ model Product {
   name            String
   description     String
   cost            Float
-  image_filename  String?
+  image_filename  String
   
 }
 
@@ -27,4 +27,26 @@ model Customer {
   last_name      String
   
   
+}
+
+model Purchase {
+  purchase_id   Int @id @default(autoincrement())
+  customer_id   Int
+  streetcity    String
+  province      String
+  country       String
+  postal_code   String
+  credit_card   String
+  credit_expire String
+  credit_cvv    String
+  invoice_amt   String
+  invoice_tax   String
+  invoice_total String
+  order_date    DateTime
+}
+
+model PurchaseItem {
+  Purchase @relation(fields:[purchase_id], references[purchase_id])
+  product_id    Int
+  quantity      Int
 }
