@@ -95,22 +95,22 @@ router.post('/logout', (req, res) => {
 router.get('/getSession', async(req, res) => {
   //verify user is logged in. so verify user is not null
   
+  
   if(req.session.customer_id){
-    const user={
-      customer_Id: req.session.customer_id,
-      email: req.session.email.PrismaClient,
-      first_name: req.session.first_name,
-      last_name: req.session.last_name
-    }
-    res.json({user});
+    res.json({
+      'customer_Id': req.session.customer_id,
+      'email': req.session.email.PrismaClient,
+      'first_name': req.session.first_name,
+      'last_name': req.session.last_name
+    })
+    
 
   }
   else{
     return res.status(401).send('Not logged in');
   }
-
-  // Return values in session for users
-  res.json({ 'user': req.session.email });
+  
+  
 });
 
 export default router;
