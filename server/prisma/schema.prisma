@@ -46,7 +46,9 @@ model Purchase {
 }
 
 model PurchaseItem {
-  Purchase @relation(fields:[purchase_id], references[purchase_id])
+  purchase_id   Int
   product_id    Int
   quantity      Int
+
+  @@id([purchase_id,product_id])
 }
