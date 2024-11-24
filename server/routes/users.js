@@ -1,13 +1,13 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { hashPassword, comparePassword } from '../lib/utility.js';
+import { hashPassword, comparePassword,validatePassword} from '../lib/utility.js';
 
 const router = express.Router();
 
-
-
 // Prisma setup
 const prisma = new PrismaClient();
+
+
 
 // Routes
 
@@ -31,6 +31,13 @@ router.post('/signup', async (req, res) => {
   if (existingUser) {
     return res.status(400).send('User already exists');
   }
+
+  const isValidPassword = validatePassword(password);
+  if (!isValidPassword) {
+    return res.status(400).send('Password does not meet the required criteria');
+  }
+
+  
 
   // Hash the password
   const hashedPassword = await hashPassword(password);
@@ -79,10 +86,12 @@ router.post('/login', async (req, res) => {
   req.session.email = existingUser.email;
   req.session.first_name = existingUser.first_name;
   req.session.last_name = existingUser.last_name;
-  console.log('logged in user: ' + req.session.email);
+  console.log({'login session info: ' : req.session});
 
   // Send response
-  res.send('Login successful');
+  res.send({'Login successful': existingUser.email,
+              'session username':req.session.first_name
+  });
 });
 
 // User logout
@@ -93,13 +102,15 @@ router.post('/logout', (req, res) => {
 
 // Get session
 router.get('/getSession', async(req, res) => {
+
+  console.log('Session:', req.session);
+  
+  
   //verify user is logged in. so verify user is not null
-  
-  
   if(req.session.customer_id){
     res.json({
       'customer_Id': req.session.customer_id,
-      'email': req.session.email.PrismaClient,
+      'email': req.session.email,
       'first_name': req.session.first_name,
       'last_name': req.session.last_name
     })

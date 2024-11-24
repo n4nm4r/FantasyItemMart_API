@@ -32,7 +32,8 @@ model Customer {
 model Purchase {
   purchase_id   Int @id @default(autoincrement())
   customer_id   Int
-  streetcity    String
+  street        String
+  city          String
   province      String
   country       String
   postal_code   String
