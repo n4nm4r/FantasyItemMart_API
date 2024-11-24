@@ -46,24 +46,24 @@ router.post('/purchase', async (req, res) => {
     credit_card,
     credit_expire,
     credit_cvv,
-    cart,
     invoice_amt,
     invoice_tax,
     invoice_total,
   } = req.body;
 
   // Validate required fields
-  // if (!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire || !credit_cvv || !cart || !invoice_amt || !invoice_tax || !invoice_total) {
-  //   return res.status(400).send('Required fields must have a value.');
-  // }
+  if (!street || !city || !province || !country || !postal_code || !credit_card || !credit_expire || !credit_cvv || !invoice_amt || !invoice_tax || !invoice_total) {
+    return res.status(400).send('Required fields must have a value.');
+  }
 
   // Session check (uncomment if needed)
-  // if (!req.session.customer_id) {
-  //   return res.status(401).send('Not logged in. Please log in to make a purchase.');
-  // }
+  if (!req.session.customer_id) {
+    return res.status(401).send('Not logged in. Please log in to make a purchase.');
+  }
 
-  const customer_id = 2; // Temporary assignment
-  //const customer_id = req.session.customer_id;
+  //const customer_id = 4; // Temporary assignment
+  const customer_id = req.session.customer_id;
+  const order_date= new Date();
 
   const purchase = await prisma.purchase.create({
     data: {
@@ -75,14 +75,16 @@ router.post('/purchase', async (req, res) => {
       credit_card,
       credit_expire,
       credit_cvv,
-      cart,
       invoice_amt,
       invoice_tax,
       invoice_total,
       customer_id,
+      order_date
     },
   });
-  res.json('Thank you for purchase');
+  //res.json('Thank you for purchase');
+
+  const cart ="3,4,6,7,9,3,4,5,2,1";
 
   const cartList = cart.split(',').map(Number);
 
@@ -97,18 +99,18 @@ router.post('/purchase', async (req, res) => {
 
   console.log(sortedcartList);
 
-  // for (const [num, count] of sortedcartList) {
-  //   await prisma.purchaseItem.create({
-  //     data: {
-  //       purchase_id: purchase.purchase_id,
-  //       product_id: parseInt(num),
-  //       quantity: count,
-  //     },
-  //   });
-  // }
+  for (const [num, count] of Object.entries(counts)) {
+    await prisma.purchaseItem.create({
+      data: {
+        purchase_id: purchase.purchase_id,
+        product_id: parseInt(num),
+        quantity: count,
+      },
+    });
+  }
 
 
-  // res.json({ message: 'Purchase successful', purchase });
+  res.json({ message: 'Purchase successful', purchase });
 });
 
 export default router;
