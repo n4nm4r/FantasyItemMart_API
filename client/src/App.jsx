@@ -1,17 +1,24 @@
-import { useState } from 'react'
-import { useCookies} from 'react/cookie';
-
-import './App.css'
+import {Outlet} from 'react-router-dom';
+import Nav from './ui/Nav.jsx'
 
 function App() {
-  const [cookies, setCookie, removeCookie]= useCookies(['item'])
-
-
+  
   return (
     <>
+      <h1>parent page</h1>
+      <p>This is the parent master page.</p>
       
-      <h1>PAGE !</h1>
+      <div>
+      <Nav />
+      </div>
       
+      <br />
+      <br />
+      <hr />
+      <div>
+        <p>This is the child page:</p>
+        <Outlet />
+      </div>
     </>
   )
 }
