@@ -9,13 +9,20 @@ export default function Cart() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const productIds = cookies.cart ? cookies.cart.split(',') : []; // Get cart items from cookies
+      const productIds = cookies.cart ? cookies.cart.split(',') : []; 
 
-      // Fetch product details based on cart product IDs
+      
+      const productCountMap = productIds.reduce((acc, id) => {
+        acc[id] = (acc[id] || 0) + 1;
+        return acc;
+      }, {});
+
+      
       const productsData = await Promise.all(
-        productIds.map(async (id) => {
+        Object.keys(productCountMap).map(async (id) => {
           const response = await fetch(`${apiHost}/api/products/${id}`);
           const product = await response.json();
+          product.quantity = productCountMap[id]; 
           return product;
         })
       );

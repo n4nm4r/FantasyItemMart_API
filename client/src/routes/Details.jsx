@@ -66,7 +66,7 @@ export default function Details() {
     }
   }
 
-  
+ 
 
   const imageUrl = `${apiHost}/images/${product.image_filename}`;
 
