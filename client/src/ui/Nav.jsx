@@ -23,11 +23,6 @@ export default function Nav() {
 
 
 
-    // <>
-    //   <Link to="/">Home</Link> <br />
-    //   <Link to="/login">Login</Link> <br />
-    //   <Link to="/cart">Cart</Link> <br />
-    //   <Link to="/logout">Logout</Link> <br />
-    // </>
+    
   )
 }

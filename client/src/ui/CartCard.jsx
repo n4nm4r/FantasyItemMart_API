@@ -20,6 +20,8 @@ export default function Card(props) {
           <p className="card-quantity">Quantity: {props.product.quantity} </p> 
           <p className="card-cost">{props.product.cost} G</p>
           <p classNAme="card-total"> Total: {total} </p>
+          <Link to={`/`} className="btn btn-outline-secondary">Continue Shopping</Link>
+          <Link to={`/checkout`} className="btn btn-outline-secondary">Checkout</Link>&nbsp;
           </div>
           
         </div>
