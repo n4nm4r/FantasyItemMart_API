@@ -16,6 +16,7 @@ const prisma = new PrismaClient();
 // User sign up
 router.post('/signup', async (req, res) => {
   const { email, password, first_name, last_name } = req.body;
+  console.log('Request Body:', req.body);
 
   // Verify inputs are not empty
   if (!email || !password || !first_name || !last_name) {
