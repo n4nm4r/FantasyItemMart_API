@@ -1,6 +1,31 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+
 
 export default function Nav() {
+  const [user, setUser]=useState('');
+    useEffect(()=>{
+      async function getUserSession() {
+        const apiHost = import.meta.env.VITE_API_HOST;
+    const apiUrl= apiHost + '/api/users/getsession';
+    const response =await fetch(url,{
+      method: "GET",
+      credentials: 'include'
+    });
+
+    if(response.ok){
+      const data =await response.json();
+      setUser(data.user)
+    }
+        
+      }
+    })
+
+
+
+
+
   return (
     <>
       <ul className="nav justify-content-center">
@@ -17,6 +42,9 @@ export default function Nav() {
           <Link to="/logout" className="nav-link">Logout</Link>
         </li>
       </ul>
+      <div>
+        <p>User: {user.email}</p>
+      </div>
     </>
   );
 }

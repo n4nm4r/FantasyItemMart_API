@@ -6,6 +6,7 @@ export default function Home(){
     const [product, setProduct] = useState([]);
     const apiHost = import.meta.env.VITE_API_HOST;
     const apiUrl= apiHost + '/api/products/all'
+   
 
     useEffect(() => {
         // Fetch data from API

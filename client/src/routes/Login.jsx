@@ -1,46 +1,41 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import {useState} from "react";
 
 export default function Login() {
-  // API url
-  const apiHost = import.meta.env.VITE_API_HOST + '/api/users/login';
 
   // react-hook-form
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  const[loginFail,setLoginFail]=useState(false);
+
+
   // Form submission handler
-  async function addUser(data) {
-    // Log the data to verify it's being captured
-    console.log('Form data:', data);
+  async function formSubmit(data) {
+    const apiUrl = import.meta.env.VITE_API_HOST + '/api/users/login';
 
-    // Check if the server expects JSON instead of form-urlencoded
-    const jsonData = {
-      email: data.email,
-      password: data.password,
-    };
 
-    try {
-      const response = await fetch(apiHost, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',  // Change to JSON if required
-        },
-        body: JSON.stringify(jsonData),  // Send data as JSON
-      });
+    const response = await fetch(apiUrl,{
+      method: "POST",
+      headers:{
+        "Content-Type":"Application/json"},
+        body:JSON.stringify(data),
+        credentials: 'include'  //this includes the cookies
+      
+    });
 
-      if (response.ok) {
-        // Redirect on successful login
-        window.location.href = '/';
-      } else {
-        // Log the error message from the response
-        console.error('Login failed:', await response.text());
-        // Optionally, display an error message to the user
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      // Optionally, display an error message to the user
+    if(response.ok){
+      window.location.href= '/';
+
     }
+    else{
+      setLoginFail(true);
+    }
+
+
   }
+    
+    
 
   return (
     <>
@@ -48,23 +43,17 @@ export default function Login() {
       <p>Login to your account</p>
 
       {/* Form submission triggers "addUser" */}
-      <form onSubmit={handleSubmit(addUser)}>
+      <form onSubmit={handleSubmit(formSubmit)}>
         <div className="mb-3">
           <label className="form-label">Email</label>
           <input
-            {...register("email", { required: "Email is required" })}
-            type="email"
-            className="form-control bg-light"
-          />
+            {...register("email", { required: "Email is required" })} type="text" className="form-control bg-light"/>
           {errors.email && <span className="text-danger">{errors.email.message}</span>}
         </div>
         <div className="mb-3">
           <label className="form-label">Password</label>
           <input
-            {...register("password", { required: "Password is required" })}
-            type="password"
-            className="form-control bg-light"
-          />
+            {...register("password", { required: "Password is required" })} type="text" className="form-control bg-light"/>
           {errors.password && <span className="text-danger">{errors.password.message}</span>}
         </div>
 
